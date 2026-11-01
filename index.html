@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FunTime — майнкрафт-сервер</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛏️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky-top:#5aa9f0; --sky-bottom:#bfe3ff; --cloud:#ffffff; --ink:#ffffff;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){--sky-top:#070b1f; --sky-bottom:#1b2a5c; --cloud:#3a4780}
+  }
+  :root[data-theme="dark"]{--sky-top:#070b1f; --sky-bottom:#1b2a5c; --cloud:#3a4780}
+  *{box-sizing:border-box;margin:0}
+  html,body{height:100%}
+  body{
+    background:linear-gradient(var(--sky-top),var(--sky-bottom)) fixed;
+    color:var(--ink); font-family:'VT323',ui-monospace,monospace;
+    overflow:hidden; display:flex; align-items:center; justify-content:center;
+  }
+
+  .cloud{
+    position:fixed;left:-240px;width:96px;height:32px;background:var(--cloud);opacity:.95;
+    box-shadow:32px -32px 0 var(--cloud),64px -32px 0 var(--cloud),96px 0 0 var(--cloud),-32px 0 0 var(--cloud),128px 0 0 var(--cloud);
+    animation:drift linear infinite;
+  }
+  @keyframes drift{to{transform:translateX(calc(100vw + 480px))}}
+  .c1{top:12vh;animation-duration:70s}
+  .c2{top:26vh;animation-duration:95s;animation-delay:-40s;transform:scale(.7)}
+  .c3{top:6vh;animation-duration:120s;animation-delay:-85s;transform:scale(1.2)}
+
+  .stars{display:none;position:fixed;top:0;left:0;width:3px;height:3px;background:#fff;
+    box-shadow:12vw 8vh #fff,25vw 20vh #fff,38vw 6vh #fff,52vw 15vh #fff,64vw 5vh #fff,78vw 22vh #fff,90vw 10vh #fff,
+    6vw 32vh #fff,45vw 30vh #fff,70vw 36vh #fff,95vw 30vh #fff,32vw 38vh #fff;
+    animation:twinkle 3s steps(2) infinite}
+  @keyframes twinkle{50%{opacity:.35}}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .stars{display:block}}
+  :root[data-theme="dark"] .stars{display:block}
+
+  .ground{position:fixed;left:0;right:0;bottom:0;pointer-events:none}
+  .grass,.dirt{image-rendering:pixelated}
+  .grass{height:64px}
+  .dirt{height:12vh}
+
+  .stage{position:relative;z-index:2;text-align:center;padding:24px 20px 20vh;max-width:680px;
+    animation:land .9s steps(9) both}
+  @keyframes land{from{transform:translateY(-60px);opacity:0}}
+
+  .scene{perspective:800px;width:120px;height:120px;margin:0 auto 44px}
+  .bob{width:100%;height:100%;animation:bob 3s steps(6) infinite alternate;transform-style:preserve-3d}
+  @keyframes bob{to{transform:translateY(-14px)}}
+  .cube{width:100%;height:100%;position:relative;transform-style:preserve-3d;animation:spin 14s linear infinite}
+  @keyframes spin{from{transform:rotateX(-24deg) rotateY(0)}to{transform:rotateX(-24deg) rotateY(360deg)}}
+  .f{position:absolute;inset:0;image-rendering:pixelated;background-size:100% 100%;border:1px solid rgba(0,0,0,.25)}
+  .f.fr{transform:translateZ(60px)} .f.bk{transform:rotateY(180deg) translateZ(60px)}
+  .f.rt{transform:rotateY(90deg) translateZ(60px)} .f.lf{transform:rotateY(-90deg) translateZ(60px)}
+  .f.tp{transform:rotateX(90deg) translateZ(60px)} .f.bt{transform:rotateX(-90deg) translateZ(60px)}
+
+  h1{
+    font-family:'Press Start 2P',monospace;font-weight:400;
+    font-size:clamp(2rem,10vw,4.2rem);line-height:1.2;
+    text-shadow:4px 4px 0 #3b3b3b,8px 8px 0 rgba(0,0,0,.22);
+  }
+  p{margin:26px auto 36px;font-size:clamp(1.5rem,4.6vw,2rem);line-height:1.25;max-width:24em;
+    text-shadow:2px 2px 0 rgba(0,0,0,.4)}
+
+  .btn{
+    display:inline-block;text-decoration:none;cursor:pointer;position:relative;
+    font-family:'Press Start 2P',monospace;font-size:clamp(.8rem,3vw,1rem);color:#fff;
+    padding:20px 30px;background-size:64px 64px;image-rendering:pixelated;
+    text-shadow:3px 3px 0 #3f3f3f;
+    outline:4px solid #000;
+    box-shadow:inset -5px -5px 0 rgba(0,0,0,.45),inset 5px 5px 0 rgba(255,255,255,.4);
+  }
+  .btn span{position:relative}
+  .btn:hover,.btn:focus-visible{filter:brightness(1.18);outline-color:#fff;box-shadow:inset -5px -5px 0 rgba(0,0,0,.45),inset 5px 5px 0 rgba(255,255,255,.4),0 0 0 8px #000}
+  .btn:active{box-shadow:inset 5px 5px 0 rgba(0,0,0,.45),inset -5px -5px 0 rgba(255,255,255,.3)}
+  .btn.shake{animation:shake .5s steps(2) both}
+  @keyframes shake{25%{transform:translate(-4px,2px)}50%{transform:translate(4px,-2px)}75%{transform:translate(-3px,-3px)}100%{transform:scale(0);opacity:0}}
+
+  .bit{position:fixed;z-index:20;pointer-events:none;image-rendering:pixelated}
+
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
+
+<div class="ground"><div class="grass" id="grass"></div><div class="dirt" id="dirt"></div></div>
+
+<main class="stage">
+  <div class="scene"><div class="bob"><div class="cube" id="cube">
+    <div class="f fr" data-t="side"></div><div class="f bk" data-t="side"></div>
+    <div class="f rt" data-t="side"></div><div class="f lf" data-t="side"></div>
+    <div class="f tp" data-t="grass"></div><div class="f bt" data-t="dirt"></div>
+  </div></div></div>
+
+  <h1>FunTime</h1>
+  <p>Новости сервера, ивенты и общение игроков — всё в нашем Telegram.</p>
+  <a class="btn" id="btn" href="https://t.me/bio0iqxd" target="_blank" rel="noopener"><span>Войти в Telegram</span></a>
+</main>
+
+<script>
+  const TG = "https://t.me/bio0iqxd";
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Процедурные 16×16 текстуры блоков
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const jit = (c, v) => { const d = (rnd() - .5) * v; return `rgb(${c.map(x => Math.max(0, Math.min(255, x + d)) | 0)})`; };
+  const GRASS = [88,168,50], DIRT = [134,96,67], STONE = [125,125,125];
+  function tex(fn){
+    const c = document.createElement('canvas'); c.width = c.height = 16;
+    const g = c.getContext('2d');
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++){ g.fillStyle = fn(x, y); g.fillRect(x, y, 1, 1); }
+    return c.toDataURL();
+  }
+  const T = {
+    grass: tex(() => jit(GRASS, 46)),
+    dirt:  tex(() => rnd() < .12 ? jit([96,68,48], 20) : jit(DIRT, 34)),
+    stone: tex(() => rnd() < .1 ? jit([95,95,95], 20) : jit(STONE, 30)),
+  };
+  T.side = tex((x, y) => y < 3 || (y === 3 && rnd() < .5) ? jit(GRASS, 46) : (rnd() < .12 ? jit([96,68,48], 20) : jit(DIRT, 34)));
+
+  document.querySelectorAll('.f').forEach(f => f.style.backgroundImage = `url(${T[f.dataset.t]})`);
+  const grass = document.getElementById('grass'), dirt = document.getElementById('dirt');
+  grass.style.background = `url(${T.side}) 0 0/64px 64px repeat-x`;
+  dirt.style.background  = `url(${T.dirt}) 0 0/64px 64px`;
+  const btn = document.getElementById('btn');
+  btn.style.backgroundImage = `url(${T.stone})`;
+
+  // Ломаем блок-кнопку и открываем Telegram
+  const palette = [GRASS, DIRT, STONE, [96,68,48]];
+  btn.addEventListener('click', e => {
+    e.preventDefault();
+    if (reduce){ go(); return; }
+    const r = btn.getBoundingClientRect(), bits = [];
+    btn.classList.add('shake');
+    for (let i = 0; i < 36; i++){
+      const el = document.createElement('div'), s = 8 + rnd() * 12;
+      el.className = 'bit';
+      el.style.cssText = `width:${s}px;height:${s}px;background:${jit(palette[i % 4], 40)}`;
+      document.body.appendChild(el);
+      bits.push({el, x: r.left + rnd() * r.width, y: r.top + rnd() * r.height,
+                 vx: (rnd() - .5) * 12, vy: -4 - rnd() * 9});
+    }
+    let n = 0;
+    (function tick(){
+      bits.forEach(b => { b.vy += .6; b.x += b.vx; b.y += b.vy; b.el.style.transform = `translate(${b.x}px,${b.y}px)`; });
+      if (++n < 60) requestAnimationFrame(tick); else bits.forEach(b => b.el.remove());
+    })();
+    setTimeout(go, 750);
+  });
+  function go(){ const w = window.open(TG, '_blank', 'noopener'); if (!w) location.href = TG; }
+</script>
+</body>
+</html>
